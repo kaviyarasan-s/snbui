@@ -1,0 +1,195 @@
+
+<div class="page-layout simple fullwidth" fxLayout="column">
+	<div class="widget-group p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+			fxFlex.gt-xs="25" fxFlex.gt-md="25">
+			<div class="fuse-widget-front">
+				<div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+					<div class="h3">Employees</div>
+				</div>
+
+				<div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+					<div class="light-blue-fg font-size-72 line-height-72">
+						{{employees}}
+					</div>
+					<div class="h3 secondary-text font-weight-500">label
+					</div>
+				</div>
+			</div>
+		</fuse-widget>
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="25"
+			fxFlex.gt-md="25">
+			<div class="fuse-widget-front">
+				<div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+					<div class="h3">Bus</div>
+				</div>
+				<div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+					<div class="light-blue-fg font-size-72 line-height-72">
+						{{buscount}}
+					</div>
+					<div class="h3 secondary-text font-weight-500">label
+					</div>
+				</div>
+			</div>
+		</fuse-widget>
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="25"
+			fxFlex.gt-md="25">
+			<div class="fuse-widget-front">
+				<div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+					<div class="h3">Lorry</div>
+				</div>
+				<div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+					<div class="light-blue-fg font-size-72 line-height-72">
+						{{lorry_count}}
+					</div>
+					<div class="h3 secondary-text font-weight-500">label
+					</div>
+				</div>
+			</div>
+		</fuse-widget>
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="25"
+			fxFlex.gt-md="25">
+			<div class="fuse-widget-front">
+				<div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+					<div class="h3">2/4 Wheeler</div>
+				</div>
+				<div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+					<div class="light-blue-fg font-size-72 line-height-72">
+						{{vehicle}}
+					</div>
+					<div class="h3 secondary-text font-weight-500">label
+					</div>
+				</div>
+			</div>
+		</fuse-widget>
+	</div>
+	<div class="widget-group" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
+		<fuse-widget class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+			<div class="fuse-widget-front">
+				<div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+					<mat-form-field>
+						<mat-select class="simplified font-size-16" [(ngModel)]="busNumber" (ngModelChange)="dataChange()">
+							<mat-option value="all">All</mat-option>
+							<ng-container *ngFor="let data of busData">
+								<mat-option [value]="data.auto_inc_id">
+									{{data.bus_no}}
+								</mat-option>
+							</ng-container>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<mat-divider></mat-divider>
+				<div class="h-400" *ngIf="loadwidget8 == 1">
+					<ngx-charts-pie-chart *fuseIfOnDom [scheme]="widget8.scheme" [results]="widgets.widget8.mainChart"
+						[legend]="widget8.legend" [explodeSlices]="widget8.explodeSlices" [labels]="widget8.labels"
+						[doughnut]="widget8.doughnut" [gradient]="widget8.gradient" (select)="widget8.onSelect($event)">
+					</ngx-charts-pie-chart>
+				</div>
+				<div class="h-200" fxLayoutAlign="center center" *ngIf="loadwidget8 == 2">
+					No data Available
+				</div>
+			</div>
+		</fuse-widget>
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+		
+			<!-- Front -->
+			<div class="fuse-widget-front">
+				<div class="px-16 py-12 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+					<div class="h3">Collection vs Expense</div>
+				</div>
+		
+				<div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center" fxLayout.gt-xs="row"
+					fxLayoutAlign.gt-xs="space-between end">
+					<div fxFlex="0 1 auto">
+						<div class="h4 secondary-text">Collection</div>
+						<div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+							<span class="secondary-text">₹</span>
+							<span>{{collection}}</span>
+						</div>
+					</div>
+				</div>
+		
+				<div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center" fxLayout.gt-xs="row"
+					fxLayoutAlign.gt-xs="space-between end">
+					<div fxFlex="0 1 auto">
+						<div class="h4 secondary-text">Expense</div>
+						<div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+							<span class="secondary-text">₹</span>
+							<span>{{totalExpense}}</span>
+						</div>
+					</div>
+				</div>
+		
+				<div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center" fxLayout.gt-xs="row"
+					fxLayoutAlign.gt-xs="space-between end">
+					<div fxFlex="0 1 auto">
+						<div class="h4 secondary-text">Remaining</div>
+						<div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+							<span class="secondary-text">₹</span>
+							<span>{{collection - totalExpense}}</span>
+						</div>
+					</div>
+					
+				</div>
+
+		
+			</div>
+			<!-- / Front -->
+		
+		</fuse-widget>
+		<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+		
+			<!-- Front -->
+			<div class="fuse-widget-front">
+		
+				<div class="simple-table-container" ms-responsive-table>
+					<div class=" table-title">
+						{{widgets.widget10.title}}
+					</div>
+		
+					<table class="simple">
+		
+						<thead>
+							<tr>
+								<th *ngFor="let column of widgets.widget10.table.columns">
+									{{column.title}}
+								</th>
+							</tr>
+						</thead>
+		
+						<tbody>
+							<tr *ngFor="let row of busData">
+								<td>
+									<span class="p-4">
+										{{row.bus_no}}
+									</span>
+									
+								</td>
+								<td>
+									<span class="p-4">
+										{{getCollection(row.auto_inc_id)}}
+									</span>
+								
+								</td>
+								<td>
+									<span class="p-4">
+										{{getExpense(row.auto_inc_id)}}
+									</span>
+								</td>
+								<td>
+									<span class="p-4">
+										{{getRemaining(row.auto_inc_id)}}
+									</span>
+								</td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		
+			</div>
+			<!-- / Front -->
+		
+		</fuse-widget>
+	</div>
+</div>

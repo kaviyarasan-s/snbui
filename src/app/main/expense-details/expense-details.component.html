@@ -1,0 +1,315 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+	<div class="content p-16">
+		<div class="pt-16 pb-32" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+			<form class="mat-card mat-elevation-z4 p-24 pb-32" #myForm="ngForm" ngNativeValidate (ngSubmit)="onSubmit(myForm)"
+				fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+				<div class="h2 mb-24">Trip Expense Details</div>
+				<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+					<mat-form-field fxFlex="50" appearance="outline">
+						<mat-label>Vehicle</mat-label>
+						<mat-select  [(ngModel)]="busNumber" (ngModelChange)="dataChange()" placeholder="Vehicle" name="busNumber" #busNumberSelect required>
+							<ng-container *ngFor="let data of busData">
+								<mat-option [value]="data.auto_inc_id">
+									{{data.bus_no}}
+								</mat-option>
+							</ng-container>
+						</mat-select>
+						<mat-error>This field is required</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="50" appearance="outline">
+						<mat-label>Trip Date</mat-label>
+						<input  matInput [matDatepicker]="picker1" (click)="picker1.open()" (focus)="picker1.open()" autocomplete="off" name="date"
+							[(ngModel)]="date" (ngModelChange)="dataChange()" placeholder="Trip Date" required>
+						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+						<mat-datepicker #picker1></mat-datepicker>
+						<mat-error>This field is required</mat-error>
+					</mat-form-field>
+				</div>
+				<!-- <ng-container *ngIf="collectionAmount"> -->
+					<div class="h3 mb-8">{{"Collection Amount : "+collectionAmount}}</div>
+					<div class="h3 mb-8">Diesel</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Fill time</mat-label>
+							<input matInput type="time" autocomplete="off" name="fillTime" [(ngModel)]="fillTime" placeholder="Fill time"
+								required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Online Rate</mat-label>
+							<input matInput type="number" autocomplete="off" name="onlineRate" [(ngModel)]="onlineRate"
+								placeholder="Online Rate">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Bunk Rate</mat-label>
+							<input matInput type="number" (change)="calculateTotal()" (keyup)="calculateTotal()" autocomplete="off"
+								name="dieselRate" [(ngModel)]="dieselRate" placeholder="Bunk Rate" required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Litres</mat-label>
+							<input matInput type="number" (change)="calculateTotal()" (keyup)="calculateTotal()" autocomplete="off"
+								name="litres" [(ngModel)]="litres" placeholder="Litres" required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Discount</mat-label>
+							<input matInput type="number" max="{{dieselTotal}}" (change)="calculateTotal()" (keyup)="calculateTotal()"
+								autocomplete="off" name="discountDiesel" [(ngModel)]="discountDiesel" placeholder="Discount">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Total</mat-label>
+							<input matInput type="number" autocomplete="off" readonly name="dieselTotal" [(ngModel)]="dieselTotal"
+								placeholder="Total" required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="h3 mb-8">Beta</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Driver</mat-label>
+							<input matInput type="number" autocomplete="off" name="driverBeta" [(ngModel)]="driverBeta"
+								placeholder="Driver Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Conductor</mat-label>
+							<input matInput type="number" autocomplete="off" name="conductorBeta" [(ngModel)]="conductorBeta"
+								placeholder="Conductor Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Trainee</mat-label>
+							<input matInput type="number" autocomplete="off" name="traineeBeta" [(ngModel)]="traineeBeta"
+								placeholder="Trainee Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Total Beta</mat-label>
+							<input matInput type="number" autocomplete="off" name="totalBeta" value={{driverBeta+conductorBeta+traineeBeta}}
+								placeholder="Total Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="h3 mb-8">Special Beta</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Driver</mat-label>
+							<input matInput type="number" autocomplete="off" name="specialDriverBeta" [(ngModel)]="specialDriverBeta"
+								placeholder="Driver Special Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Conductor</mat-label>
+							<input matInput type="number" autocomplete="off" name="SpecialConductorBeta" [(ngModel)]="SpecialConductorBeta"
+								placeholder="Conductor Special Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Trainee</mat-label>
+							<input matInput type="number" autocomplete="off" name="specialTraineeBeta" [(ngModel)]="specialTraineeBeta"
+								placeholder="Trainee Special Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="25" appearance="outline">
+							<mat-label>Total Beta</mat-label>
+							<input matInput type="number" autocomplete="off" name="totalSpecialBeta" value={{specialDriverBeta+SpecialConductorBeta+specialTraineeBeta}}
+								placeholder="Total Beta">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="h3 mb-8">Extra Expense</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Pooja</mat-label>
+							<input matInput type="number" autocomplete="off" name="pooja" [(ngModel)]="pooja" placeholder="Pooja">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Union Clearance</mat-label>
+							<input matInput type="number" autocomplete="off" name="clearance" [(ngModel)]="clearance"
+								placeholder="Union Clearance">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Agent</mat-label>
+							<input matInput type="number" autocomplete="off" name="agent" [(ngModel)]="agent" placeholder="Agent">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Ticket Return</mat-label>
+							<input matInput type="number" autocomplete="off" name="ticketReturn" [(ngModel)]="ticketReturn"
+								placeholder="Ticket Return">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Connection Expenses</mat-label>
+							<input matInput type="number" autocomplete="off" name="connectionCharges" [(ngModel)]="connectionCharges"
+								placeholder="Connection Expenses">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Cleaning Expenses</mat-label>
+							<input matInput type="number" autocomplete="off" name="cleaningCharges" [(ngModel)]="cleaningCharges"
+								placeholder="Cleaning Expenses">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="h3 mb-8">Other Expense</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
+						*ngFor="let data of otherExpense;let indexIden=index;let i=index;">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Comment</mat-label>
+							<input matInput type="number" autocomplete="off" name='{{"comment"+i}}' [(ngModel)]="data.comment"
+								placeholder="Comment" required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Expense Amount</mat-label>
+							<input (keypress)="calculateOtherTotal()" (ngModelChange)="calculateOtherTotal()" matInput type="number"
+								autocomplete="off" name='{{"amountPaid"+i}}' [(ngModel)]="data.amount" placeholder="Expense Amount" required>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+						<div fxFlex="33" *ngIf="i == 0" style="height: 50px;padding: 5px;cursor: pointer;">
+							<mat-icon style="cursor: pointer;" (click)="addPayment()" aria-hidden="false" aria-label="Add Entry">add
+							</mat-icon>
+						</div>
+						<div fxFlex="33" *ngIf="i < 5 &&i != 0 && (i+1) == otherExpLen"
+							style="height: 50px;padding: 5px;cursor: pointer;">
+							<mat-icon style="cursor: pointer;" (click)="removePayment()" aria-hidden="false" aria-label="Remove Entry">close
+							</mat-icon>
+						</div>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>Total Other Expense</mat-label>
+							<input matInput type="number" autocomplete="off" name="totalOtherExp" [(ngModel)]="totalOtherExp"
+								placeholder="Total Other Expense" readonly>
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+
+					<div class="h3 mb-8">Free Ticket Details</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field fxFlex="33" appearance="outline">
+							<mat-label>No.of free Tickets</mat-label>
+							<input matInput type="number" autocomplete="off" name="freeTickets" [(ngModel)]="freeTickets" (ngModelChange)="calculate()" placeholder="Free Tickets">
+							<mat-error>This field is required</mat-error>
+						</mat-form-field>
+					</div>
+					<div *ngIf="freeTickets" style="width: 100%;" fxLayout="column">
+						<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+							<div fxFlex="10" fxLayoutAlign="start center">
+								Trip No
+							</div>
+							<div fxFlex="10" fxLayoutAlign="center center">
+								From
+							</div>
+							<div fxFlex="10" fxLayoutAlign="center center">
+								To
+							</div>
+							<div fxFlex="10" fxLayoutAlign="center center">
+								name
+							</div>
+						</div>
+						<ng-container *ngFor="let data of ticketData;let i=index;">
+							<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+								<div fxFlex="10">
+									<mat-form-field fxFlex="100" appearance="outline">
+										<mat-label>Trip</mat-label>
+										<input type="number" matInput autocomplete="off"
+											name='{{"tripNo"+i}}' [(ngModel)]="data['tripNo']" placeholder="Trip" required>
+										<mat-error>required</mat-error>
+									</mat-form-field>
+								</div>
+								<div fxFlex="10">
+									<mat-form-field fxFlex="100" appearance="outline">
+										<mat-label>From</mat-label>
+										<input type="number" matInput autocomplete="off"
+											name='{{"from"+i}}' [(ngModel)]="data['from']" placeholder="From">
+									</mat-form-field>
+								</div>
+								<div fxFlex="10">
+									<mat-form-field fxFlex="100" appearance="outline">
+										<mat-label>To</mat-label>
+										<input type="number" matInput autocomplete="off"
+											name='{{"to"+i}}' [(ngModel)]="data['to']" placeholder="To">
+									</mat-form-field>
+								</div>
+								<div fxFlex="10">
+									<mat-form-field fxFlex="100" appearance="outline">
+										<mat-label>Name</mat-label>
+										<input type="number" matInput autocomplete="off" name='{{"name"+i}}'
+											[(ngModel)]="data['name']" placeholder="Name" required>
+									</mat-form-field>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+					<div class="h3 mb-8">Attachments</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<div style="width: 50%;">
+							<mat-label>Image</mat-label>
+							<input #imageInput multiple type="file" autocomplete="off" placeholder="Image" accept="image/*">
+						</div>
+					</div>
+					<div align="center">
+						<button mat-raised-button color="accent" class="submit-button" aria-label="Save">Save</button>
+					</div>
+				<!-- </ng-container> -->
+			</form>
+			
+		</div>
+		<div class="mat-elevation-z8 fuse-card auto-width p-8" fxLayout="column" fxLayoutAlign="center center"
+			fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="center center">
+			<mat-form-field appearance="outline" class="noPaddingBottom">
+				<input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off" placeholder="Bus No, Amount">
+			</mat-form-field>
+		</div>
+		<div class="pt-16 pb-32" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+			<table mat-table [dataSource]="dataSource">
+		
+				<ng-container matColumnDef="sno">
+					<th mat-header-cell *matHeaderCellDef>S.No. </th>
+					<td mat-cell *matCellDef="let row;let i=index;"> {{ i + 1 }} </td>
+				</ng-container>
+		
+				<ng-container matColumnDef="entry_date">
+					<th mat-header-cell *matHeaderCellDef>Entry date</th>
+					<td mat-cell *matCellDef="let row"> {{row.view_date}} </td>
+				</ng-container>
+		
+				<ng-container matColumnDef="bus_name">
+					<th mat-header-cell *matHeaderCellDef>Bus No </th>
+					<td mat-cell *matCellDef="let row"> {{row.bus_name}} </td>
+				</ng-container>
+		
+				<ng-container matColumnDef="action">
+					<th mat-header-cell *matHeaderCellDef> Action </th>
+					<td mat-cell *matCellDef="let row">
+						<div style="display: flex;justify-content: center;">
+							<button type="button" mat-icon-button color="accent" title="Edit" (click)="edit(row)">
+								<mat-icon>edit</mat-icon>
+							</button>
+							<button mat-icon-button type="button" class="actionBtn" color="accent" title="Delete"
+								(click)="delete(row)">
+								<mat-icon>delete</mat-icon>
+							</button>
+						</div>
+					</td>
+				</ng-container>
+		
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;">
+				</tr>
+			</table>
+		</div>
+		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+</div>

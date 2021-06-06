@@ -1,0 +1,116 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+	<div class="content p-16">
+		<div class="pt-16 pb-32" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+			<form class="mat-card mat-elevation-z4 p-24 pb-32" #myForm="ngForm" ngNativeValidate (ngSubmit)="onSubmit(myForm)"
+				style="max-width: 100%;" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+				<div class="h2 mb-24">Bus Re-Scheduling Details</div>
+				<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+					<mat-form-field fxFlex="33" appearance="outline">
+						<mat-label>Bus Number</mat-label>
+						<mat-select [(ngModel)]="busNumber" (ngModelChange)="busChange()" placeholder="Bus Number"
+							name="busNumber" #busNumberSelect required>
+							<ng-container *ngFor="let data of busData">
+								<mat-option [value]="data.auto_inc_id">
+									{{data.bus_no}}
+								</mat-option>
+							</ng-container>
+						</mat-select>
+						<mat-error>This field is required</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="33" appearance="outline">
+						<mat-label>Start Date</mat-label>
+						<input matInput [matDatepickerFilter]="myFilter" (ngModelChange)="endDateChange()" [matDatepicker]="picker1"
+							(click)="picker1.open()" (focus)="picker1.open()" autocomplete="off" name="startDate"
+							[(ngModel)]="startDate" placeholder="Start Date" required>
+						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+						<mat-datepicker #picker1></mat-datepicker>
+						<mat-error>This field is required</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="33" appearance="outline">
+						<mat-label>End Date</mat-label>
+						<input matInput [matDatepickerFilter]="myFilterOne" [matDatepicker]="picker2" [disabled]="startDate == null"
+							(focus)="picker2.open()" (click)="picker2.open()" autocomplete="off" name="endDate" [(ngModel)]="endDate" placeholder="End Date"
+							(ngModelChange)="endDateChange()" required>
+						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+						<mat-datepicker #picker2></mat-datepicker>
+						<mat-error>This field is required</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="h3 mb-8">Scheduling Table</div>
+				<div fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto" style="padding-left: 10%;">
+					<ng-container *ngFor="let iterateData of selectedDates">
+						<div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 0 auto">
+							<div fxLayoutAlign="center center" fxFlex="1 0 auto">{{iterateData}}</div>
+							<div fxLayoutAlign="center center" fxFlex="1 0 auto">{{moment(iterateData, "D-M-YYYY").format("dddd")}}</div>
+						</div>
+					</ng-container>
+				</div>
+				<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="busNumber"
+					style="width: 100%;">
+					<div class="bus-container" fxFlex="1 0 auto" style="border: 1px solid black;width: 100%;">
+						<div fxLayoutAlign="center center" style="padding: 10px;width:10%;">
+							{{getBusName(busNumber)}}
+						</div>
+						<div *ngFor="let iterateData of selectedDates" fxFlex="1 0 auto" style="width:12.5%;">
+							<div fxLayout="column" *ngIf="overAllData[iterateData][busNumber]" fxLayoutAlign="start center"
+								fxFlex="1 0 auto" style="border-left: 1px solid black;">
+								<mat-form-field style="width: 100%;" appearance="outline">
+									<mat-label>Trip</mat-label>
+									<mat-select [disabled]="overAllData[iterateData][busNumber].disable"
+										[(ngModel)]="overAllData[iterateData][busNumber]['noTrips']" name='{{"noTrips"+iterateData+busNumber}}'
+										required multiple>
+										<ng-container *ngFor="let data of tripData">
+											<mat-option [value]="data.value">
+												{{data.value}}
+											</mat-option>
+										</ng-container>
+									</mat-select>
+									<mat-error>This field is required</mat-error>
+								</mat-form-field>
+								<mat-form-field style="width: 100%;" appearance="outline">
+									<mat-label>Driver Name </mat-label>
+									<mat-select [disabled]="overAllData[iterateData][busNumber].disable" [(ngModel)]="overAllData[iterateData][busNumber]['driverName']"
+										name='{{"driverName"+iterateData+busNumber}}' required>
+										<ng-container *ngFor="let data of driverData">
+											<mat-option [value]="data.auto_inc_id">
+												{{data.employee_name}}
+											</mat-option>
+										</ng-container>
+									</mat-select>
+									<mat-error>This field is required</mat-error>
+								</mat-form-field>
+								<mat-form-field style="width: 100%;" appearance="outline">
+									<mat-label>Conductor Name</mat-label>
+									<mat-select [disabled]="overAllData[iterateData][busNumber].disable" [(ngModel)]="overAllData[iterateData][busNumber]['conductorName']"
+										name='{{"conductorName"+iterateData+busNumber}}' required>
+										<ng-container *ngFor="let data of conductorData">
+											<mat-option [value]="data.auto_inc_id">
+												{{data.employee_name}}
+											</mat-option>
+										</ng-container>
+									</mat-select>
+									<mat-error>This field is required</mat-error>
+								</mat-form-field>
+								<mat-form-field style="width: 100%;" appearance="outline">
+									<mat-label>Trainee Name</mat-label>
+									<mat-select [disabled]="overAllData[iterateData][busNumber].disable" [(ngModel)]="overAllData[iterateData][busNumber]['traineeName']"
+										name='{{"traineeName"+iterateData+busNumber}}'>
+										<ng-container *ngFor="let data of traineeData">
+											<mat-option [value]="data.auto_inc_id">
+												{{data.employee_name}}
+											</mat-option>
+										</ng-container>
+									</mat-select>
+									<mat-error>This field is required</mat-error>
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div align="center" style="padding-top: 20px;">
+					<button mat-raised-button color="accent" class="submit-button" aria-label="Submit">Update</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
